@@ -42,18 +42,36 @@ the lines whose disconnection costs the least.
 
 ![Demo](docs/demo.gif)
 
-*Pick a planning horizon, get the lines ranked by load and the grid topology with the numbers on it.*
+*Planning for 3 hours, reading the ranked lines and the grid plot, then re-planning for 8 hours.*
 
 **[▶ Watch the full video](docs/demo.mp4)**
 
 </div>
 
 <details>
-<summary><b>More screenshots</b></summary>
+<summary><b>Screenshots of every view</b></summary>
 
 <br>
 
-![Planner](docs/screenshot-planner.png)
+**Start** — pick a planning horizon between 1 and 12 hours
+
+![Start](docs/01-start.png)
+
+**Ranking, 3-hour horizon** — lines ordered by load, lowest first, grouped by hour
+
+![Ranking 3h](docs/02-ranking-3h.png)
+
+**Grid topology** — substations, transformers and consumers, with the computed load on each line
+
+![Grid plot](docs/03-grid-plot.png)
+
+**Ranking, 8-hour horizon** — the same grid planned further ahead
+
+![Ranking 8h](docs/04-ranking-8h.png)
+
+**Grid topology, 8-hour run** — the load figures change with the forecast
+
+![Grid plot 8h](docs/05-grid-plot-8h.png)
 
 </details>
 
@@ -89,32 +107,39 @@ print(line_offer(3))     # ranking for the next 3 hours
 
 ## ✨ Features
 
-### Forecasts load instead of reading it
+### 📈 Forecasts load instead of reading it
 
-Live consumption is compared against the same hour in the historical series to derive a per-user
-factor, which is then applied to the historical curve for the coming hours. A user consuming 20%
-above their usual level is expected to keep doing so.
+- Live consumption is compared against the same hour in the historical series
+- The resulting per-user factor is applied to the historical curve for the coming hours
+- A household consuming 20% above its usual level is expected to keep doing so
 
-### Understands the grid, not just the numbers
+### 🕸 Understands the grid, not just the numbers
 
-The topology is parsed from a **CIM** (IEC 61970) XML model: which consumers and generators hang
-off which transformer, and which substation feeds it. Load is aggregated up that tree, with
-generation subtracted from consumption.
+- Topology parsed from a **CIM** (IEC 61970) XML model
+- Knows which consumers and generators hang off which transformer, and which substation feeds it
+- Load is aggregated up that tree, with generation subtracted from consumption
 
-### Ranks lines by what they actually cost
+### 🎯 Ranks lines by what they actually cost
 
-Each hour gets its own priority queue of transformers ordered by net load, so the planner answers
-"disconnect these five first" rather than dumping raw numbers.
+- Each hour gets its own priority queue of transformers ordered by net load
+- The answer is "disconnect these five first", not a dump of raw numbers
+- Planning horizon is adjustable from 1 to 12 hours
 
-### Shows the grid
+### 🗺 Shows the grid
 
-The topology is rendered with the computed load on every substation-transformer line, colour-coded
-by node type, so a decision can be checked visually before it is applied.
+- Topology rendered with the computed load on every substation-transformer line
+- Nodes colour-coded by type: substations, transformers, consumers
+- A decision can be checked visually before it is applied
 
-### Weather-aware
+### 🌤 Weather-aware
 
-The weather forecast feeds the generation side of the balance, which matters for a grid with
-renewable sources whose output depends on conditions.
+- The forecast feeds the generation side of the balance
+- Matters for a grid with renewable sources whose output depends on conditions
+
+### 💾 Reproducible runs
+
+- Every run is written to `data/results_<timestamp>`
+- Synthetic data generators are included, so the pipeline runs without a live grid feed
 
 ---
 
