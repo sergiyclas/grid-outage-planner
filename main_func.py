@@ -3,11 +3,11 @@ import os
 from datetime import datetime
 
 from generators import generate_current
-from parsing import parser_current, parser_historical, parser_weather, parse_sim
+from parsing import parse_sim, parser_current, parser_historical, parser_weather
 from writer import write_output_to_file
 
 
-def line_offer(COUNT_HOURS):
+def line_offer(COUNT_HOURS, return_details=False):
     CURRENT_TIME = datetime.now()
     CURRENT_DAY = CURRENT_TIME.strftime('%Y-%m-%d')
     CURRENT_HOUR = int(CURRENT_TIME.strftime('%H'))
@@ -97,6 +97,16 @@ def line_offer(COUNT_HOURS):
             results += f'\nline from {subs[0]} to {trans} = {weight}'
 
     valid_time = CURRENT_TIME.strftime('%Y-%m-%d-%H-%M-%S')
+    os.makedirs('data', exist_ok=True)
     write_output_to_file(results, f'data/results_{valid_time}')
 
-    return results
+    if not return_details:
+        return results
+
+    return results, {
+        'priority_queues': all_priority_queues,
+        'raw_trans_to_sub': raw_trans_to_sub,
+        'transformator_to_every': transformator_to_every,
+        'first_hour': CURRENT_HOUR,
+        'hours': COUNT_HOURS,
+    }

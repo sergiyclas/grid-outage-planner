@@ -1,42 +1,55 @@
-import matplotlib.pyplot as plt
-import networkx as nx
-from typing import List, Dict
+import matplotlib
 
-def visual(raw_trans_to_sub: Dict[str, str], transformator_to_every: Dict[str, List[str]], all_priority_queues: Dict[int, List], hour: int):
-    # Створення графу
-    G = nx.DiGraph()
+matplotlib.use("Agg")
 
-    # Додавання вузлів
+import matplotlib.pyplot as plt  # noqa: E402
+import networkx as nx  # noqa: E402
+
+
+def build_figure(raw_trans_to_sub, transformator_to_every, all_priority_queues, hour):
+    """Draw the grid topology with the computed load on every substation-transformer line."""
+    graph = nx.DiGraph()
+
     for transformer, substation in raw_trans_to_sub.items():
-        G.add_edge(substation, transformer)
+        graph.add_edge(substation, transformer)
 
     for transformer, consumers in transformator_to_every.items():
         for consumer in consumers:
-            G.add_edge(transformer, consumer)
+            graph.add_edge(transformer, consumer)
 
-    # Додавання ваги
     for weight, substation, transformer in all_priority_queues[hour]:
-        G[substation[0]][transformer]['weight'] = weight
+        graph[substation[0]][transformer]['weight'] = weight
 
-    # Покращений розташунок вузлів із збільшеною відстанню між ними
-    pos = nx.spring_layout(G, seed=42, k=1.5, iterations=50)
+    pos = nx.spring_layout(graph, seed=42, k=1.5, iterations=50)
 
-    # Візуалізація
-    plt.figure(figsize=(18, 12))
+    figure, ax = plt.subplots(figsize=(14, 9))
 
-    # Відображення вузлів
-    nx.draw_networkx_nodes(G, pos, node_size=700, node_color='lightblue', edgecolors='black')
+    node_colors = [
+        '#f4a261' if node.startswith('transformer')
+        else '#2a9d8f' if node.startswith('substation')
+        else '#a8dadc'
+        for node in graph.nodes()
+    ]
 
-    # Відображення ребер
-    nx.draw_networkx_edges(G, pos, width=1, alpha=0.7, edge_color='grey', arrows=True, arrowsize=12)
+    nx.draw_networkx_nodes(graph, pos, node_size=700, node_color=node_colors, edgecolors='black', ax=ax)
+    nx.draw_networkx_edges(graph, pos, width=1, alpha=0.7, edge_color='grey', arrows=True, arrowsize=12, ax=ax)
+    nx.draw_networkx_labels(graph, pos, font_size=9, font_weight='bold', ax=ax)
 
-    # Відображення міток вузлів
-    nx.draw_networkx_labels(G, pos, font_size=10, font_weight='bold')
+    edge_labels = {
+        (source, target): f'{graph[source][target]["weight"]:.2f}'
+        for source, target in graph.edges()
+        if 'weight' in graph[source][target]
+    }
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_color='#e63946', font_size=9, ax=ax)
 
-    # Відображення значень ребер
-    edge_labels = {(s, t): f'{G[s][t]["weight"]:.2f}' for s, t in G.edges() if 'weight' in G[s][t]}
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='red', font_size=10)
+    ax.set_title(f"Grid load at hour {hour}: substations, transformers and consumers", fontsize=14)
+    ax.axis('off')
+    figure.tight_layout()
 
-    plt.title("Електромережа: Трансформатори, Підстанції та Споживачі", fontsize=15)
-    plt.axis('off')
+    return figure
+
+
+def visual(raw_trans_to_sub, transformator_to_every, all_priority_queues, hour):
+    """Render the grid topology to a window (kept for standalone use)."""
+    build_figure(raw_trans_to_sub, transformator_to_every, all_priority_queues, hour)
     plt.show()

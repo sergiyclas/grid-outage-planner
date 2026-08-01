@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Години доби
 hours = list(range(24))
@@ -7,7 +8,7 @@ hours = list(range(24))
 # Припустимо, що максимальна потужність станції досягається в обідній час (12:00)
 # Для спрощення візьмемо вигляд гауссової кривої
 
-import numpy as np
+
 
 # Генерація гауссової кривої для симуляції добового циклу
 def generate_daily_output(hours, peak_power=1.0):

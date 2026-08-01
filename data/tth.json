@@ -1,29 +1,29 @@
 {
     "transformer_1": {
-        "limit": 28
+        "limit": 13
     },
     "transformer_2": {
-        "limit": 11
+        "limit": 24
     },
     "transformer_3": {
-        "limit": 11
+        "limit": 17
     },
     "transformer_4": {
-        "limit": 12
+        "limit": 30
     },
     "transformer_5": {
-        "limit": 16
+        "limit": 13
     },
     "transformer_6": {
-        "limit": 12
+        "limit": 17
     },
     "transformer_7": {
-        "limit": 16
+        "limit": 25
     },
     "transformer_8": {
-        "limit": 15
+        "limit": 14
     },
     "transformer_9": {
-        "limit": 28
+        "limit": 15
     }
 }

@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 from generators import generate_current
-from parsing import parser_current, parser_historical, parser_weather, parse_sim
+from parsing import parse_sim, parser_current, parser_historical, parser_weather
 from writer import write_output_to_file
 
 COUNT_HOURS = 3

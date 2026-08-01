@@ -1,6 +1,7 @@
 import json
 import xml.etree.ElementTree as ET
 
+
 def parser_current(path: str, COUNT_HOURS, CURRENT_HOUR, CURRENT_DAY):
     with open(path, 'r') as file:
         data = json.load(file)

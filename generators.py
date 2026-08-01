@@ -40,7 +40,7 @@ def generate_sun_air_pressure():
         current_date += timedelta(hours=1)
 
     number = current_date.strftime('%d_%H_%M_%S')
-    with open(f'data/predict_weather.json', 'w') as f:
+    with open('data/predict_weather.json', 'w') as f:
         json.dump(data, f, indent=4)
 
 
@@ -63,7 +63,7 @@ def generate_current():
     }
 
     number = start_date.strftime('%d_%H_%M_%S')
-    with open(f'data/current.json', 'w') as f:
+    with open('data/current.json', 'w') as f:
         json.dump(data, f, indent=4)
 
 
@@ -92,7 +92,7 @@ def generate_historical():
         current_date += timedelta(hours=1)
     #
     number = start_date.strftime('%d_%H_%M_%S')
-    with open(f'data/historical.json', 'w') as f:
+    with open('data/historical.json', 'w') as f:
         json.dump(data, f, indent=4)
 
 
@@ -108,7 +108,7 @@ def generate_tth():
         }
 
     number = start_date.strftime('%d_%H_%M_%S')
-    with open(f'data/tth.json', 'w') as f:
+    with open('data/tth.json', 'w') as f:
         json.dump(stations, f, indent=4)
 
 
@@ -201,12 +201,15 @@ def generate_random_cim_model():
                     consumers_connections = ET.SubElement(consumer, 'Connections')
                     consumers_connection = ET.SubElement(consumers_connections, 'Connection', to=transformer_id)
 
-    output_file = f'data/cim_model.xml'
-    tree = ET.ElementTree(cim_model)
+    output_file = 'data/cim_model.xml'
+    tree = ET.ElementTree(root)
     tree.write(output_file, encoding='utf-8', xml_declaration=True)
 
     return root
 
-generate_tth()
-generate_historical()
-generate_sun_air_pressure()
+
+if __name__ == '__main__':
+    generate_tth()
+    generate_historical()
+    generate_sun_air_pressure()
+    generate_random_cim_model()

@@ -1,0 +1,5 @@
+line-length = 140
+
+[lint]
+# Real errors and undefined names; the hackathon code is kept as it was written.
+select = ["E4", "E9", "F82", "F81", "I"]
