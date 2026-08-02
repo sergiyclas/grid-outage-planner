@@ -8,6 +8,7 @@ Built at the **Cybersecurity Innovations Hackathon 2024** (team BugLords). The p
 transformer load from the grid topology, live consumption and the weather forecast, then ranks
 the lines whose disconnection costs the least.
 
+[![Lint](https://github.com/sergiyclas/grid-outage-planner/actions/workflows/lint.yml/badge.svg)](https://github.com/sergiyclas/grid-outage-planner/actions/workflows/lint.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Hackathon](https://img.shields.io/badge/Hackathon-2024-blueviolet)
 
